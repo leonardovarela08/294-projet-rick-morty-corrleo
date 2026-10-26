@@ -1,5 +1,9 @@
-<v-footer>
-<div class="px-4 text-center w-10"></div>;
-
-
-</v-footer>
+<script setup>
+</script>
+<template>
+  <v-footer>
+    <slot>
+      {{ new Date().getFullYear() }} - Rick and Morty
+    </slot>
+  </v-footer>
+</template>

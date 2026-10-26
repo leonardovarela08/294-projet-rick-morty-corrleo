@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <h1 class="text-h3 text-center my-6">
-      Personnages
+      Rick & Morty
     </h1>
 
     <v-row>
@@ -21,7 +21,7 @@
 
 <script setup>
   import { onMounted, ref } from 'vue'
-  import { characterCard} from '@/components/characterCard.vue'
+  import CharacterCard from '@/components/CharacterCard.vue'
 
   const characters = ref([])
 
