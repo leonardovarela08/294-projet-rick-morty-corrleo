@@ -1,5 +1,6 @@
 <!-- Carte utilisé pour répresenter les données (personnages, lieux, episodes)-->
 <template>
+
   <v-card>
     <v-card-title>{{ lieu.name }}</v-card-title>
     <v-card-subtitle>Type : {{ lieu.type }}  </v-card-subtitle>

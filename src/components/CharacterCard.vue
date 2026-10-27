@@ -1,11 +1,11 @@
 <!-- Carte utilisé pour répresenter les données (personnages, lieux, episodes)-->
 <template>
-  <v-card>
+  <v-card hover :to ="`/personnage/${character.id}`">
     <v-img
-      :src="getImageUrl(character.image)"
       :alt="character.name"
-      height="200"
       cover
+      height="200"
+      :src="getImageUrl(character.image)"
     />
     <v-card-title>{{ character.name }}</v-card-title>
     <v-card-subtitle>Origine : {{ character.origin || "Inconnue" }}</v-card-subtitle>
