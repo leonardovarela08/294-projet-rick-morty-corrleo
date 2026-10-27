@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <h1 class="text-h3 text-center my-6">
-      Rick & Morty
+      Personnages
     </h1>
 
     <v-row>

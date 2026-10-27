@@ -4,7 +4,7 @@
 
 <template>
   <v-container>
-    <h1 class="text-h3 text-center my-6"></h1>
+    <h1 class="text-h3 text-center my-6">Lieux</h1>
   </v-container>
 </template>
 
