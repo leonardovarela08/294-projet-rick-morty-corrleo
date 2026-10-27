@@ -31,7 +31,7 @@
 <script setup>
 const menuItems = [
   { title: 'Personnages', path: '/', icon: 'mdi-alien' },
-  { title: 'Episodes', path: '/episodes', icon: 'mdi-ufo' },
+  { title: 'Épisodes', path: '/episodes', icon: 'mdi-ufo' },
   {title: 'Lieux', path: '/lieux', icon: 'mdi-earth' },
   { title: 'À propos', path: '/a-propos', icon: 'mdi-information' },
 
