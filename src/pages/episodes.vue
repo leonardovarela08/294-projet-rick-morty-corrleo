@@ -22,12 +22,8 @@
 <script setup>
   import { onMounted, ref } from 'vue'
   import EpisodeCard from '@/components/EpisodeCard.vue'
+  import { useRickMortyStore } from '@/stores/rickMortyStore.js'
 
-  const episodes = ref([])
-
-  onMounted(async () => {
-    const response = await fetch('https://apis.divtec.me/api/rickandmorty/episodes?limit=100')
-    const json = await response.json()
-    episodes.value = json.data
-  })
+  const store = useRickMortyStore()
+  const { episodes } = storeToRefs(store)
 </script>

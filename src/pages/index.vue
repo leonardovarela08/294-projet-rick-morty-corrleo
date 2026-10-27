@@ -22,12 +22,8 @@
 <script setup>
   import { onMounted, ref } from 'vue'
   import CharacterCard from '@/components/CharacterCard.vue'
+  import { useRickMortyStore } from '@/stores/rickMortyStore.js'
 
-  const characters = ref([])
-
-  onMounted(async () => {
-    const response = await fetch('https://apis.divtec.me/api/rickandmorty/characters?limit=100')
-    const json = await response.json()
-    characters.value = json.data
-  })
+  const store = useRickMortyStore()
+  const { characters } = storeToRefs(store)
 </script>

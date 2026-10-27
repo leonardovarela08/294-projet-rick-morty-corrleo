@@ -6,7 +6,7 @@
 
     <v-row>
       <v-col
-        v-for="lieu in lieux"
+        v-for="lieu in locations"
         :key="lieu.id"
         cols="12"
         lg="3"
@@ -23,11 +23,8 @@
   import { onMounted, ref } from 'vue'
   import LieuCard from '@/components/LieuCard.vue'
 
-  const lieux = ref([])
+  import { useRickMortyStore } from '@/stores/rickMortyStore.js'
 
-  onMounted(async () => {
-    const response = await fetch('https://apis.divtec.me/api/rickandmorty/locations?limit=100')
-    const json = await response.json()
-    lieux.value = json.data
-  })
+  const store = useRickMortyStore()
+  const { locations } = storeToRefs(store)
 </script>
