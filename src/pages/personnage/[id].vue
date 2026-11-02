@@ -42,10 +42,11 @@
   import api from '@/plugins/axios.js'
   import { getImageUrl } from '@/utils/imageUrl.js'
 
+  // Déclaration des constantes
   const route = useRoute()
   const character = ref(null)
   const isLoading = ref(true)
-
+  // appel de l'api
   onMounted(async () => {
     try {
       const response = await api.get(`/characters/${route.params.id}`)
