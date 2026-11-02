@@ -1,11 +1,17 @@
-
 <template>
   <v-container>
     <!-- bouton Retour : @click appelle $router.back() -->
     <v-btn @click=" $router.back()">Retour</v-btn>
+    <!-- chargemment -->
+    <v-skeleton-loader
+      v-if="isLoading"
+      class="mx-auto"
+      max-width="800"
+      type="image, article"
+    />
 
     <!-- si pas de personnage on affiche une alerte d'erreur -->
-    <v-alert v-if="!character" type="error">Personnage non trouvé.</v-alert>
+    <v-alert v-else-if="!character" type="error">Personnage non trouvé.</v-alert>
 
     <!-- sinon on affiche la carte -->
     <v-card v-else class="mx-auto" max-width="800">
@@ -19,7 +25,7 @@
       <v-card-title>{{ character.name }}</v-card-title>
       <!--      affiche tout les informations disponibles sur les personnages-->
       <v-card-text>
-        Statut : {{ character.status || "Inconnue"}} <br>
+        Statut : {{ character.status || "Inconnue" }} <br>
         Espèce : {{ character.species }} <br>
         Genre : {{ character.gender || "Non determiné" }} <br>
         Origine : {{ character.origin || "Inconnue" }} <br>
@@ -32,16 +38,22 @@
 </template>
 
 <script setup>
-
-  import { getImageUrl} from '@/utils/imageUrl.js'
+  import { ref } from 'vue'
+  import api from '@/plugins/axios.js'
+  import { getImageUrl } from '@/utils/imageUrl.js'
 
   const route = useRoute()
   const character = ref(null)
+  const isLoading = ref(true)
 
   onMounted(async () => {
-    const response = await fetch(`https://apis.divtec.me/api/rickandmorty/characters/${route.params.id}`)
-    if (response.ok) {
-      character.value = await response.json()
+    try {
+      const response = await api.get(`/characters/${route.params.id}`)
+      character.value = response.data
+    } catch (error) {
+      console.error(error)
+    } finally {
+      isLoading.value = false
     }
   })
 </script>

@@ -4,7 +4,23 @@
       Épisodes
     </h1>
 
-    <v-row>
+    <v-row v-if="isLoading">
+      <v-col v-for="n in 8"
+             :key="n"
+             cols="12"
+             lg="3"
+             md="4"
+             sm="6">
+        <v-skeleton-loader type="article" />
+      </v-col>
+    </v-row>
+
+    <!-- 2. erreur -->
+    <v-alert v-else-if="error" type="error" variant="tonal">
+      {{ error }}
+    </v-alert>
+
+    <v-row v-else>
       <v-col
         v-for="episode in episodes"
         :key="episode.id"
@@ -20,10 +36,9 @@
 </template>
 
 <script setup>
-  import { onMounted, ref } from 'vue'
   import EpisodeCard from '@/components/EpisodeCard.vue'
   import { useRickMortyStore } from '@/stores/rickMortyStore.js'
 
   const store = useRickMortyStore()
-  const { episodes } = storeToRefs(store)
+  const { episodes, isLoading, error } = storeToRefs(store)
 </script>

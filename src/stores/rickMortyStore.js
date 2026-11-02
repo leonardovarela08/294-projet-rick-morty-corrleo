@@ -1,13 +1,10 @@
 import { defineStore } from 'pinia'
+import api from '@/plugins/axios'
 
 // Charge une ressource ('characters', 'episodes' ou 'locations')
 async function fetchResource (name) {
-  const response = await fetch(`https://apis.divtec.me/api/rickandmorty/${name}?limit=100`)
-  if (!response.ok) {
-    throw new Error(`${name} non trouvé`)
-  }
-  const json = await response.json()
-  return json.data
+  const response = await api.get(`/${name}`, { params: { limit: 100 } })
+  return response.data.data
 }
 
 // Store pinia

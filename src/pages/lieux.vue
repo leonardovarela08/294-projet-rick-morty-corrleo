@@ -3,8 +3,23 @@
     <h1 class="text-h3 text-center my-6">
       Lieux
     </h1>
+    <v-row v-if="isLoading">
+      <v-col v-for="n in 8"
+             :key="n"
+             cols="12"
+             lg="3"
+             md="4"
+             sm="6">
+        <v-skeleton-loader type="article" />
+      </v-col>
+    </v-row>
 
-    <v-row>
+    <!-- 2. erreur -->
+    <v-alert v-else-if="error" type="error" variant="tonal">
+      {{ error }}
+    </v-alert>
+
+    <v-row v-else>
       <v-col
         v-for="lieu in locations"
         :key="lieu.id"
@@ -20,11 +35,10 @@
 </template>
 
 <script setup>
-  import { onMounted, ref } from 'vue'
   import LieuCard from '@/components/LieuCard.vue'
 
   import { useRickMortyStore } from '@/stores/rickMortyStore.js'
 
   const store = useRickMortyStore()
-  const { locations } = storeToRefs(store)
+  const { locations, isLoading, error } = storeToRefs(store)
 </script>
