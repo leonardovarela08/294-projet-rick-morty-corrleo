@@ -15,7 +15,7 @@
         @click="$router.push('/')"
       />
 
-      <v-toolbar-title> Rickedéx </v-toolbar-title>
+      <v-toolbar-title> Rickedéx</v-toolbar-title>
       <v-btn
         v-for="link in menuItems"
         :key="link.title"
@@ -29,11 +29,12 @@
 </template>
 
 <script setup>
-const menuItems = [
-  { title: 'Personnages', path: '/', icon: 'mdi-alien' },
-  { title: 'Épisodes', path: '/episodes', icon: 'mdi-ufo' },
-  {title: 'Lieux', path: '/lieux', icon: 'mdi-earth' },
-  { title: 'À propos', path: '/a-propos', icon: 'mdi-information' },
+  const menuItems = [
+    { title: 'Personnages', path: '/', icon: 'mdi-alien' },
+    { title: 'Épisodes', path: '/episodes', icon: 'mdi-ufo' },
+    { title: 'Lieux', path: '/lieux', icon: 'mdi-earth' },
+    { title: 'À propos', path: '/a-propos', icon: 'mdi-information' },
+    { title: 'Favoris', path: '/favoris', icon: 'mdi-star' },
 
-]
+  ]
 </script>
