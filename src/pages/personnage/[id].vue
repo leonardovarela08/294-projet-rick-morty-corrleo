@@ -33,6 +33,16 @@
         Apparaît dans : {{ character.episodeCount }} épisodes
 
       </v-card-text>
+      <v-card-actions>
+        <v-btn
+          :prepend-icon="store.isFavorite(character) ? 'mdi-heart' : 'mdi-heart-outline'"
+          :color="store.isFavorite(character) ? 'red' : ''"
+          variant="tonal"
+          @click="toggleFavorite"
+        >
+          {{ store.isFavorite(character) ? 'Retirer des favoris' : 'Ajouter aux favoris' }}
+        </v-btn>
+      </v-card-actions>
     </v-card>
   </v-container>
 </template>
@@ -40,12 +50,15 @@
 <script setup>
   import { ref } from 'vue'
   import api from '@/plugins/axios.js'
+  import { useRickMortyStore } from '@/stores/rickMortyStore.js'
   import { getImageUrl } from '@/utils/imageUrl.js'
 
   // Déclaration des constantes
   const route = useRoute()
   const character = ref(null)
   const isLoading = ref(true)
+  const store = useRickMortyStore()
+
   // appel de l'api
   onMounted(async () => {
     try {
@@ -57,6 +70,11 @@
       isLoading.value = false
     }
   })
+
+  // Ajoute ou retire le personnage des favoris
+  function toggleFavorite () {
+    store.toggleFavorite(character.value)
+  }
 </script>
 <style scoped>
 

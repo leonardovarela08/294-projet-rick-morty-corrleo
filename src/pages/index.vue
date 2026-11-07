@@ -135,8 +135,8 @@
     return filteredByStatus.value.filter(c => c.name.toLowerCase().includes(searchQuery.value.toLowerCase()))
   })
 
-  // Fonction pour trier/ ordonner le personnages en ordre alphabétique
-  function toggleSort() {
+  // Fonction pour trier/ ordonner les personnages en ordre alphabétique
+  function toggleSort () {
     sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
   }
 
