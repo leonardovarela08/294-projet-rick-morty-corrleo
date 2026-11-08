@@ -1,37 +1,27 @@
+<!--
+  pages/[...path].vue — page 404
+  Le nom [...path] attrape toutes les adresses qui ne correspondent à aucune autre page.
+-->
 <template>
-  <!--
-  Conteneur principal de la page 404
-    * Utilisation de classes pour centrer le contenu et le styliser
-  -->
+  <!-- text-center : tout le contenu est centré ; py-10 : grand espace en haut et en bas -->
   <v-container class="text-center py-10">
-    <!--
-    Titre de la page 404
-      * class="mb-4" ajoute une marge en bas pour espacer le titre
-      * text-h1 applique le style d’un titre principal pour une apparence distincte
-    -->
-    <h1 class="text-h1 mb-4">Oups! Page non trouvée (404)</h1>
+    <!-- Titre de la page 404, même style que les autres titres de page -->
+    <h1 class="page-title">Oups ! Page non trouvée <span class="page-title__count">(404)</span></h1>
 
-    <!--
-    Message d’erreur pour expliquer que la page n'existe pas
-      * class="mb-6" ajoute une marge en bas pour espacer le message
-      * text-subtitle-1 applique le style d’un sous-titre pour une meilleure hiérarchie visuelle
-    -->
+    <!-- Message qui explique que la page n'existe pas -->
     <p class="text-subtitle-1 mb-6">
-      La page que vous cherchez n'existe pas ou a été déplacée.
+      La page que vous cherchez n'existe pas ou a été déplacée dans une autre dimension.
     </p>
 
-    <!--
-    Bouton pour retourner à la page d'accueil
-      * color="primary" applique la couleur principale pour le bouton
-      * large rend le bouton plus visible et centré
-      * @click="$router.push('/')" redirige vers la page d'accueil
-    -->
-    <v-btn color="primary" large to="/">
+    <!-- Bouton de retour à l'accueil : to="/" fait la navigation -->
+    <v-btn
+      color="primary"
+      prepend-icon="mdi-home"
+      rounded="lg"
+      size="large"
+      to="/"
+    >
       Retour à l'accueil
     </v-btn>
   </v-container>
 </template>
-
-<script setup>
-// Aucune logique JavaScript additionnelle nécessaire ici
-</script>

@@ -28,12 +28,15 @@ export default defineConfig({
       },
     }),
     Components(),
+    // Polices Google chargées par unplugin-fonts (inspirées de la maquette) :
+    // - Space Grotesk : textes et titres (police principale, voir src/styles/settings.scss)
+    // - Space Mono    : petites étiquettes, numéros et boutons (voir src/styles/global.scss)
     Fonts({
       google: {
-        families: [{
-          name: 'Roboto',
-          styles: 'wght@100;300;400;500;700;900',
-        }],
+        families: [
+          { name: 'Space Grotesk', styles: 'wght@400;500;700' },
+          { name: 'Space Mono', styles: 'wght@400;700' },
+        ],
       },
     }),
     AutoImport({

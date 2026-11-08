@@ -12,10 +12,15 @@ declare module 'vue' {
     AppHeader: typeof import('./src/components/AppHeader.vue')['default']
     CharacterCard: typeof import('./src/components/CharacterCard.vue')['default']
     EpisodeCard: typeof import('./src/components/EpisodeCard.vue')['default']
+    EpisodeSamples: typeof import('./src/components/EpisodeSamples.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    InfoField: typeof import('./src/components/InfoField.vue')['default']
     LieuCard: typeof import('./src/components/LieuCard.vue')['default']
+    PassBand: typeof import('./src/components/PassBand.vue')['default']
+    PassPhoto: typeof import('./src/components/PassPhoto.vue')['default']
     RickCard: typeof import('./src/components/rickCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    StatusBadge: typeof import('./src/components/StatusBadge.vue')['default']
   }
 }

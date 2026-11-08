@@ -1,10 +1,14 @@
 /**
  * src/styles/settings.scss
  *
- * Configures SASS variables and Vuetify overwrites
+ * Variables SASS de Vuetify, lues au moment de la compilation
+ * (ce fichier est déclaré dans vite.config.mjs : styles.configFile).
+ * Doc : https://vuetifyjs.com/features/sass-variables/
  */
 
-// https://vuetifyjs.com/features/sass-variables/`
-// @use 'vuetify/settings' with (
-//   $color-pack: false
-// );
+// Police principale de tout le site (textes, titres, boutons Vuetify).
+// Space Grotesk est chargée dans vite.config.mjs ; les polices système
+// prennent le relais tant qu'elle n'est pas encore téléchargée.
+@use 'vuetify/settings' with (
+  $body-font-family: ('Space Grotesk', system-ui, sans-serif)
+);

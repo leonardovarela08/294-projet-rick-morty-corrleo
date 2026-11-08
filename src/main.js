@@ -1,8 +1,12 @@
 /**
  * main.js
  *
- * Bootstraps Vuetify and other plugins then mounts the App`
+ * Point d'entrée : crée l'application Vue, enregistre les plugins
+ * (Vuetify, router, Pinia) puis l'affiche dans <div id="app">.
  */
+
+// Composables
+import { createApp } from 'vue'
 
 // Plugins
 import { registerPlugins } from '@/plugins'
@@ -10,11 +14,10 @@ import { registerPlugins } from '@/plugins'
 // Components
 import App from './App.vue'
 
-// Composables
-import { createApp } from 'vue'
-
 // Styles
 import 'unfonts.css'
+// Styles partagés par toute l'application (fond spatial, cadre « Pass », étiquettes…)
+import '@/styles/global.scss'
 
 const app = createApp(App)
 
