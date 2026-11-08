@@ -13,10 +13,10 @@
     </h1>
 
     <!-- ============ Barre de contrôles : recherche, filtre, tri, réinitialisation ============ -->
-    <!-- justify="center" : les contrôles restent centrés sous le titre -->
-    <v-row class="mb-6" justify="center">
+    <!-- 4 colonnes de même largeur sur grand écran (md="3" × 4 = 12), 2 par ligne sur tablette -->
+    <v-row class="mb-6">
       <!-- Recherche par nom (v-model relié au store grâce à storeToRefs) -->
-      <v-col cols="12" md="4" sm="6">
+      <v-col cols="12" md="3" sm="6">
         <v-text-field
           v-model="searchQuery"
           bg-color="surface"
@@ -48,21 +48,25 @@
         />
       </v-col>
 
-      <!-- Tri A → Z / Z → A et réinitialisation (ga-2 : espace de 8px entre les boutons) -->
-      <v-col class="d-flex align-center ga-2" cols="12" md="auto">
-        <v-btn
-          class="mono-button"
-          height="48"
-          :prepend-icon="sortOrder === 'asc'
-            ? 'mdi-sort-alphabetical-ascending'
-            : 'mdi-sort-alphabetical-descending'"
+      <!-- Tri : par numéro (ordre de l'API, par défaut), A → Z ou Z → A -->
+      <!-- Pas de « clearable » : il y a toujours un tri actif -->
+      <v-col cols="12" md="3" sm="6">
+        <v-select
+          v-model="sortOrder"
+          bg-color="surface"
+          color="primary"
+          density="comfortable"
+          hide-details
+          :items="sortOptions"
+          label="Trier par"
+          prepend-inner-icon="mdi-sort"
           rounded="lg"
           variant="outlined"
-          @click="toggleSort"
-        >
-          Tri {{ sortOrder === 'asc' ? 'A → Z' : 'Z → A' }}
-        </v-btn>
+        />
+      </v-col>
 
+      <!-- Réinitialisation de la recherche, du filtre et du tri -->
+      <v-col class="d-flex align-center" cols="12" md="3" sm="6">
         <v-btn
           class="mono-button"
           color="primary"
@@ -155,6 +159,12 @@
     { title: 'Mort', value: 'Dead' },
     { title: 'Inconnu', value: 'unknown' },
   ]
+  // Options du tri : 'id' = ordre des numéros (Rick n° 1, Morty n° 2…), comme l'API
+  const sortOptions = [
+    { title: 'N° (ordre de l’API)', value: 'id' },
+    { title: 'Nom A → Z', value: 'asc' },
+    { title: 'Nom Z → A', value: 'desc' },
+  ]
 
   // ======================================== Pipeline des personnages ======================================== //
   //  characters → statut → recherche → tri → page. Chaque étape part du résultat de la précédente
@@ -176,18 +186,19 @@
     return filteredByStatus.value.filter(c => c.name.toLowerCase().includes(searchQuery.value.toLowerCase()))
   })
 
-  // Bascule l'ordre du tri entre A → Z et Z → A
-  function toggleSort () {
-    sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
-  }
-
-  // Tri alphabétique : copie [...] avant sort() car sort modifie le tableau d'origine
-  // localeCompare 'fr' respecte les accents
+  // Tri selon le mode choisi : copie [...] avant sort() car sort modifie le tableau d'origine.
+  // La fonction de comparaison renvoie un nombre négatif si a doit venir avant b,
+  // positif si a doit venir après, 0 si l'ordre ne change pas.
   const sortedCharacters = computed(() => {
     // La règle du linter propose toSorted() (même résultat) ; on garde la version du cours,
     // qui est sans risque ici puisque [...] crée déjà une copie.
     // eslint-disable-next-line unicorn/no-array-sort
     return [...filteredBySearch.value].sort((a, b) => {
+      // Par numéro : a.id - b.id est négatif quand a a le plus petit numéro (ex. 1 - 2 = -1)
+      if (sortOrder.value === 'id') {
+        return a.id - b.id
+      }
+      // Par nom : localeCompare 'fr' respecte les accents ; « - » inverse l'ordre pour Z → A
       const comparison = a.name.localeCompare(b.name, 'fr')
       return sortOrder.value === 'asc' ? comparison : -comparison
     })
@@ -216,7 +227,7 @@
 </script>
 
 <style scoped>
-/* Boutons Tri / Réinitialiser dans la police « mono » de la maquette */
+/* Bouton Réinitialiser dans la police « mono » de la maquette */
 .mono-button {
   font-family: var(--rm-font-mono);
   font-weight: 700;

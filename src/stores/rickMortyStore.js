@@ -47,7 +47,8 @@ export const useRickMortyStore = defineStore('rickMorty', {
     // on retrouve sa recherche, son filtre, son tri et sa page en revenant d'une fiche.
     searchQuery: '',
     selectedStatus: null,
-    sortOrder: 'asc',
+    // Mode de tri : 'id' (par numéro, par défaut), 'asc' (A → Z) ou 'desc' (Z → A)
+    sortOrder: 'id',
     // Page affichée (dans le store aussi pour que le logo du header puisse la remettre à 1)
     currentPage: 1,
   }),
@@ -147,7 +148,7 @@ export const useRickMortyStore = defineStore('rickMorty', {
     resetFilters () {
       this.searchQuery = ''
       this.selectedStatus = null
-      this.sortOrder = 'asc'
+      this.sortOrder = 'id'
       this.currentPage = 1
     },
   },

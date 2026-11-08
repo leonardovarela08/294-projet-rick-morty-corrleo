@@ -105,8 +105,8 @@
               </div>
             </section>
 
-            <!-- Autant d'épisodes listés que d'apparitions réelles (episodeCount), sur 2 colonnes -->
-            <episode-samples :character="character" :columns="2" :count="character.episodeCount ?? 0" />
+            <!-- 4 épisodes listés sur 2 colonnes, puis « + N autres épisodes » pour le reste -->
+            <episode-samples :character="character" :columns="2" :count="4" />
           </div>
         </v-col>
       </v-row>
