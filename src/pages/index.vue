@@ -22,7 +22,7 @@
         />
       </v-col>
 
-      <!--Barre de filtre par status -->
+      <!-- ============= Barre de filtre par status ================ -->
       <v-col
         cols="12"
         sm="6"
@@ -39,7 +39,7 @@
           density="compact"
         />
       </v-col>
-      <!-- Bouton de tri  -->
+      <!-- ============ Bouton de tri ==========  -->
 
       <v-col
         cols="12"
@@ -54,6 +54,15 @@
           @click="toggleSort"
         >
           Tri {{ sortOrder === 'asc' ? 'A → Z' : 'Z → A' }}
+        </v-btn>
+
+        <v-btn
+          class="ml-2"
+          variant="text"
+          prepend-icon="mdi-filter-remove"
+          @click="store.resetFilters()"
+        >
+          Réinitialiser
         </v-btn>
       </v-col>
     </v-row>
@@ -108,25 +117,23 @@
 </template>
 
 <script setup>
-  import { ref, watch } from 'vue'
+  import {  watch } from 'vue'
   import CharacterCard from '@/components/CharacterCard.vue'
   import { useRickMortyStore } from '@/stores/rickMortyStore.js'
 
   // déclaration des constantes
   const store = useRickMortyStore()
-  const { characters, isLoading, error, currentPage } = storeToRefs(store)
+  const { characters, isLoading, error, currentPage, searchQuery, selectedStatus, sortOrder } = storeToRefs(store)
 
   const perPage = 100
-  const searchQuery = ref("")
-  const selectedStatus = ref(null)
-  const sortOrder = ref('asc')
   const statusOptions = [
     { title: 'Vivant', value: 'Alive' },
     { title: 'Mort', value: 'Dead' },
     { title: 'Inconnu', value: 'unknown' },
   ]
 
-  // ======================================== Pipeline des personnages/ données  ================================================= //
+  // ======================================== Pipeline des personnages/ données ================================================= //
+  //  characters → statut → recherche → tri → page. Chaque étape part du résultat de la précédente
 
   // Filtre les personnages selon leurs status (Vivant, Mort, Inconnu)
   const filteredByStatus = computed(() => {

@@ -37,6 +37,12 @@ export const useRickMortyStore = defineStore('rickMorty', {
     favorites: [],
     // Page affiché dans la liste des personnages (je l'ai mis dans le store pour que le header puisse le réinitialiser
     currentPage: 1,
+    // --- État de la liste des personnages ---
+    // Gardé dans le store (et pas dans la page) pour survivre à la navigation :
+    // on retrouve sa recherche, son filtre, son tri et sa page en revenant d'une fiche.
+    searchQuery: '',
+    selectedStatus: null,
+    sortOrder: 'asc',
   }),
 
   getters: {
@@ -99,6 +105,13 @@ export const useRickMortyStore = defineStore('rickMorty', {
     },
     // Remet la liste des personnages sur sa première page
     resetPage () {
+      this.currentPage = 1
+    },
+    // Remet recherche, filtre, tri et page à leur valeur de départ
+    resetFilters () {
+      this.searchQuery = ''
+      this.selectedStatus = null
+      this.sortOrder = 'asc'
       this.currentPage = 1
     },
   },
