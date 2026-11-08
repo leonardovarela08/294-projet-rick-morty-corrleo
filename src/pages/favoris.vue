@@ -18,7 +18,8 @@
       Aucun favori pour le moment. Clique sur le cœur d'un personnage pour l'ajouter.
     </v-alert>
 
-    <!-- Sinon : la grille des favoris (getFavorites transforme les id en personnages) -->
+    <!-- Sinon : la grille des favoris (getFavorites transforme les id en personnages),
+         mêmes colonnes que la page Personnages -->
     <v-row v-else>
       <v-col
         v-for="character in store.getFavorites"
@@ -26,6 +27,8 @@
         cols="12"
         lg="4"
         sm="6"
+        xl="3"
+        xxl="2"
       >
         <character-card :character="character" />
       </v-col>

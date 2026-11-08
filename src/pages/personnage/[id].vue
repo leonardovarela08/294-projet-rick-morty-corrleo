@@ -10,15 +10,17 @@
       Comme la recherche, le filtre et la page sont dans le store,
       on retrouve la liste exactement comme on l'avait laissée.
     -->
-    <v-btn
-      class="mb-4"
-      color="primary"
-      prepend-icon="mdi-chevron-left"
-      variant="text"
-      @click="$router.back()"
-    >
-      Retour aux personnages
-    </v-btn>
+    <!-- La div a la même largeur que la fiche : le bouton reste aligné sur son bord gauche -->
+    <div class="detail-back">
+      <v-btn
+        color="primary"
+        prepend-icon="mdi-chevron-left"
+        variant="text"
+        @click="$router.back()"
+      >
+        Retour aux personnages
+      </v-btn>
+    </div>
 
     <!-- 1. Chargement : isLoading vaut true dès le départ (pas de flash d'erreur) -->
     <v-skeleton-loader
@@ -157,6 +159,12 @@
 .detail-card {
   max-width: 1000px;
   margin: 0 auto;
+}
+
+/* Même largeur et même centrage que la fiche, avec un espace en dessous */
+.detail-back {
+  max-width: 1000px;
+  margin: 0 auto 16px;
 }
 
 /* ----- Colonne gauche ----- */

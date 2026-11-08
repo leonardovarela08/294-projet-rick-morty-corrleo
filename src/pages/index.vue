@@ -91,6 +91,8 @@
         cols="12"
         lg="4"
         sm="6"
+        xl="3"
+        xxl="2"
       >
         <!-- overflow-hidden : l'image du squelette respecte les coins arrondis -->
         <v-skeleton-loader class="pass-frame rounded-xl overflow-hidden" type="image, article, actions" />
@@ -113,7 +115,11 @@
         Aucun personnage ne correspond à votre recherche ou à ce filtre.
       </v-alert>
 
-      <!-- Grille : 1 carte par ligne sur téléphone, 2 sur tablette, 3 sur grand écran -->
+      <!--
+        Grille (une ligne = 12 unités) : 1 carte par ligne sur téléphone (cols="12"),
+        2 sur tablette (sm="6"), 3 sur ordinateur (lg="4"), 4 dès 1920 px (xl="3")
+        et 6 dès 2560 px (xxl="2"). Sur grand écran, on ajoute des cartes au lieu de les élargir.
+      -->
       <v-row v-else>
         <v-col
           v-for="character in paginatedCharacters"
@@ -121,6 +127,8 @@
           cols="12"
           lg="4"
           sm="6"
+          xl="3"
+          xxl="2"
         >
           <character-card :character="character" />
         </v-col>
