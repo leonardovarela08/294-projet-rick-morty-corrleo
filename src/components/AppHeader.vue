@@ -12,7 +12,7 @@
         class="mr-4 pa-0 cursor-pointer"
         image="@/assets/rick-icon.svg"
         size="64"
-        @click="$router.push('/')"
+        @click="goHome()"
       />
 
       <v-toolbar-title> Rickedéx</v-toolbar-title>
@@ -29,6 +29,17 @@
 </template>
 
 <script setup>
+  import { useRickMortyStore } from '@/stores/rickMortyStore.js'
+
+  const store = useRickMortyStore()
+  const router = useRouter()
+
+  // Clic sur le logo : on remet la liste à la page 1, on va à l'accueil et on remonte en haut
+  function goHome () {
+    store.resetPage()
+    router.push('/')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
   const menuItems = [
     { title: 'Personnages', path: '/', icon: 'mdi-alien' },
     { title: 'Épisodes', path: '/episodes', icon: 'mdi-ufo' },

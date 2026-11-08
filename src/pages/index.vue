@@ -86,7 +86,7 @@
       </v-alert>
       <v-row v-else>
         <v-col
-          v-for="character in sortedCharacters"
+          v-for="character in paginatedCharacters"
           :key="character.id"
           cols="12"
           sm="6"
@@ -96,19 +96,27 @@
           <character-card :character="character" />
         </v-col>
       </v-row>
+      <v-pagination
+        v-if="totalPages > 1"
+        v-model="currentPage"
+        :length="totalPages"
+        :total-visible="5"
+        class="mt-6"
+      />
     </template>
   </v-container>
 </template>
 
 <script setup>
-  import { ref } from 'vue'
+  import { ref, watch } from 'vue'
   import CharacterCard from '@/components/CharacterCard.vue'
   import { useRickMortyStore } from '@/stores/rickMortyStore.js'
 
   // déclaration des constantes
   const store = useRickMortyStore()
-  const { characters, isLoading, error } = storeToRefs(store)
+  const { characters, isLoading, error, currentPage } = storeToRefs(store)
 
+  const perPage = 100
   const searchQuery = ref("")
   const selectedStatus = ref(null)
   const sortOrder = ref('asc')
@@ -117,6 +125,8 @@
     { title: 'Mort', value: 'Dead' },
     { title: 'Inconnu', value: 'unknown' },
   ]
+
+  // ======================================== Pipeline des personnages/ données  ================================================= //
 
   // Filtre les personnages selon leurs status (Vivant, Mort, Inconnu)
   const filteredByStatus = computed(() => {
@@ -145,5 +155,21 @@
       const comparison = a.name.localeCompare(b.name, 'fr')
       return sortOrder.value === 'asc' ? comparison : -comparison
     })
+  })
+
+  const totalPages = computed(() => Math.max(1, Math.ceil(sortedCharacters.value.length / perPage)))
+
+  // retourne un copie du tableau avec 100 personnages, permetant d'afficher 100 par page
+  const paginatedCharacters = computed(() => {
+    const start = (currentPage.value - 1) * perPage
+    return sortedCharacters.value.slice(start, start + perPage)
+  })
+
+  watch([searchQuery, selectedStatus, sortOrder], () => {
+    currentPage.value = 1
+  })
+
+  watch(currentPage, () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   })
 </script>
