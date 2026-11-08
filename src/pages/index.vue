@@ -8,7 +8,7 @@
     <!-- Titre + nombre de résultats après recherche et filtre (masqué pendant le chargement,
          sinon on lirait « (0) » alors que les personnages arrivent) -->
     <h1 class="page-title">
-      Personnages
+      Voyageurs
       <span v-if="!isLoading" class="page-title__count">({{ sortedCharacters.length }})</span>
     </h1>
 
@@ -48,7 +48,7 @@
         />
       </v-col>
 
-      <!-- Tri : par numéro (ordre de l'API, par défaut), A → Z ou Z → A -->
+      <!-- Tri : par numéro ou par ordre alphabétique -->
       <!-- Pas de « clearable » : il y a toujours un tri actif -->
       <v-col cols="12" md="3" sm="6">
         <v-select
@@ -83,7 +83,7 @@
 
     <!-- ============ Les 3 états de l'API : chargement, erreur, données ============ -->
 
-    <!-- 1. Chargement : des squelettes de la même taille que les cartes -->
+    <!-- 1. Chargement : on affiche des squelettes de la même taille que les cartes -->
     <v-row v-if="isLoading">
       <v-col
         v-for="n in 6"
@@ -167,7 +167,7 @@
     { title: 'Mort', value: 'Dead' },
     { title: 'Inconnu', value: 'unknown' },
   ]
-  // Options du tri : 'id' = ordre des numéros (Rick n° 1, Morty n° 2…), comme l'API
+  // Options du tri : 'id' = ordre des numéros (Rick n° 1 etc.), comme l'API
   const sortOptions = [
     { title: 'N° (ordre de l’API)', value: 'id' },
     { title: 'Nom A → Z', value: 'asc' },
@@ -186,7 +186,7 @@
     return characters.value.filter(c => (c.status || 'unknown') === selectedStatus.value)
   })
 
-  // Recherche par nom, insensible à la casse (toLowerCase des deux côtés)
+  // Recherche par nom, toLowerCase des deux côtés pour rendre la recherche insensible à la caisse
   const filteredBySearch = computed(() => {
     if (!searchQuery.value) {
       return filteredByStatus.value

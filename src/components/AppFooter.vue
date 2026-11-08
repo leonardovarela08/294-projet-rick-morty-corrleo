@@ -20,7 +20,7 @@
       <!-- Crédits : le slot et son contenu par défaut -->
       <p class="app-footer__credits">
         <slot>
-          {{ new Date().getFullYear() }} - Rick and Morty
+          © {{ new Date().getFullYear() }} - Leonardo Varela | Rick and Morty
         </slot>
       </p>
     </v-container>
