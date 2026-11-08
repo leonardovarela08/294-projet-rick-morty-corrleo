@@ -117,7 +117,7 @@
 </template>
 
 <script setup>
-  import {  watch } from 'vue'
+  import { watch } from 'vue'
   import CharacterCard from '@/components/CharacterCard.vue'
   import { useRickMortyStore } from '@/stores/rickMortyStore.js'
 
@@ -166,7 +166,7 @@
 
   const totalPages = computed(() => Math.max(1, Math.ceil(sortedCharacters.value.length / perPage)))
 
-  // retourne un copie du tableau avec 100 personnages, permetant d'afficher 100 par page
+  // retourne une copie du tableau avec 100 personnages au plus :  ceux de la page courante
   const paginatedCharacters = computed(() => {
     const start = (currentPage.value - 1) * perPage
     return sortedCharacters.value.slice(start, start + perPage)

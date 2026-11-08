@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import api from '@/plugins/axios'
 
 // Charge une ressource ('characters', 'episodes' ou 'locations')
-// l'api limite chaque réponse à 100 élements
+// l'api limite chaque réponse à 100 éléments
 async function fetchResource (name) {
   // 1. Première page : on lit aussi le nombre total de pages
   const first = await api.get(`/${name}`, { params: { limit: 100, page: 1 } })
@@ -35,14 +35,15 @@ export const useRickMortyStore = defineStore('rickMorty', {
     isLoading: false,
     error: null,
     favorites: [],
-    // Page affiché dans la liste des personnages (je l'ai mis dans le store pour que le header puisse le réinitialiser
-    currentPage: 1,
+
     // --- État de la liste des personnages ---
     // Gardé dans le store (et pas dans la page) pour survivre à la navigation :
     // on retrouve sa recherche, son filtre, son tri et sa page en revenant d'une fiche.
     searchQuery: '',
     selectedStatus: null,
     sortOrder: 'asc',
+    // Page affiché dans la liste des personnages (je l'ai mis dans le store pour que le header puisse le réinitialiser)
+    currentPage: 1,
   }),
 
   getters: {

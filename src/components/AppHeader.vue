@@ -6,7 +6,7 @@
         * class="mr-4 pa-0 cursor-pointer" ajoute une marge à droite, retire le padding, et change le curseur pour indiquer la cliquabilité
         * image définit le chemin vers le logo (rick-icon) de l'application
         * size="64" définit la taille de l'avatar
-        * @click redirige vers la page d'accueil
+        * @click redirige vers la page d'accueil et remets la liste à la page 1
       -->
       <v-avatar
         class="mr-4 pa-0 cursor-pointer"
