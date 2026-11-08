@@ -3,8 +3,25 @@ import api from '@/plugins/axios'
 
 // Charge une ressource ('characters', 'episodes' ou 'locations')
 async function fetchResource (name) {
-  const response = await api.get(`/${name}`, { params: { limit: 100 } })
-  return response.data.data
+  // 1. Première page : on lit aussi le nombre total de pages
+  const first = await api.get(`/${name}`, { params: { limit: 100, page: 1 } })
+  const { pages } = first.data.pagination
+  let items = first.data.data
+
+  // 2. On prépare les requêtes des pages 2 à `pages`
+  const requests = []
+  for (let page = 2; page <= pages; page++) {
+    requests.push(api.get(`/${name}`, { params: { limit: 100, page } }))
+  }
+
+  // 3. On les lance toutes en même temps et on attend les résultats
+  const responses = await Promise.all(requests)
+
+  // 4. On ajoute chaque page au tableau
+  for (const response of responses) {
+    items = items.concat(response.data.data)
+  }
+  return items
 }
 
 // Store pinia
@@ -41,13 +58,13 @@ export const useRickMortyStore = defineStore('rickMorty', {
     },
     async init () {
       this.isLoading = true
+      this.loadFavorites()
       try {
         await Promise.all([
           this.fetchCharacters(),
           this.fetchLocations(),
           this.fetchEpisodes(),
         ])
-        this.loadFavorites()
       } catch (error) {
         this.error = 'Erreur lors du chargement de la page'
         console.error(error)
