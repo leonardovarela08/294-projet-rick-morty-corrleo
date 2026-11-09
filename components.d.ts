@@ -21,6 +21,7 @@ declare module 'vue' {
     RickCard: typeof import('./src/components/rickCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SearchBar: typeof import('./src/components/SearchBar.vue')['default']
     StatusBadge: typeof import('./src/components/StatusBadge.vue')['default']
   }
 }

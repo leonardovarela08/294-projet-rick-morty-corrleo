@@ -15,20 +15,9 @@
     <!-- ============ Barre de contrôles : recherche, filtre, tri, réinitialisation ============ -->
     <!-- 4 colonnes de même largeur sur grand écran (md="3" × 4 = 12), 2 par ligne sur tablette -->
     <v-row class="mb-6">
-      <!-- Recherche par nom (v-model relié au store grâce à storeToRefs) -->
+      <!-- Recherche par nom : composant SearchBar (prop + emit), relié au store par v-model -->
       <v-col cols="12" md="3" sm="6">
-        <v-text-field
-          v-model="searchQuery"
-          bg-color="surface"
-          clearable
-          color="primary"
-          density="comfortable"
-          hide-details
-          label="Rechercher un personnage"
-          prepend-inner-icon="mdi-magnify"
-          rounded="lg"
-          variant="outlined"
-        />
+        <search-bar v-model="searchQuery" label="Rechercher un personnage" />
       </v-col>
 
       <!-- Filtre par statut -->
@@ -99,13 +88,23 @@
       </v-col>
     </v-row>
 
-    <!-- 2. Erreur -->
-    <v-alert v-else-if="error" type="error" variant="tonal">
+    <!-- 2. Erreur sans données de secours : rien à afficher à part le message -->
+    <v-alert v-else-if="error && !isUsingMock" type="error" variant="tonal">
       {{ error }}
     </v-alert>
 
     <!-- 3. Données -->
     <template v-else>
+      <!-- API injoignable : on prévient l'utilisateur que ce sont les données de secours (mock.json) -->
+      <v-alert
+        v-if="isUsingMock"
+        class="mb-6"
+        title="Erreur réseau"
+        type="error"
+        variant="tonal"
+      >
+        {{ error }} Affichage de {{ characters.length }} personnages de secours en attendant.
+      </v-alert>
       <!-- Aucun résultat pour cette recherche / ce filtre -->
       <v-alert
         v-if="sortedCharacters.length === 0"
@@ -152,12 +151,16 @@
 <script setup>
   import { computed, watch } from 'vue'
   import CharacterCard from '@/components/CharacterCard.vue'
+  import SearchBar from '@/components/SearchBar.vue'
   import { useRickMortyStore } from '@/stores/rickMortyStore.js'
 
   // ===== Store =====
   // storeToRefs garde la réactivité : searchQuery, selectedStatus… restent liés au store
   const store = useRickMortyStore()
-  const { characters, isLoading, error, currentPage, searchQuery, selectedStatus, sortOrder } = storeToRefs(store)
+  const {
+    characters, isLoading, error, isUsingMock,
+    currentPage, searchQuery, selectedStatus, sortOrder,
+  } = storeToRefs(store)
 
   // ===== Constantes de la page =====
   const perPage = 100

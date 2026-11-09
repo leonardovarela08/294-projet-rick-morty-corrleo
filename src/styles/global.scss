@@ -1,0 +1,108 @@
+/**
+ * src/styles/global.scss
+ *
+ * Styles partagés par toute l'application (importés une seule fois dans main.js).
+ * On y met uniquement ce qui sert à plusieurs composants :
+ *   1. les variables (police « mono »)
+ *   2. le fond spatial de la page
+ *   3. les titres de page
+ *   4. les petites étiquettes en majuscules
+ *   5. le cadre lumineux « Pass » (carte et fiche personnage)
+ *   6. le code-barres décoratif
+ *
+ * Les couleurs viennent TOUJOURS du thème Vuetify (src/plugins/vuetify.js) :
+ *   rgb(var(--v-theme-primary))        → couleur pleine
+ *   rgba(var(--v-theme-primary), 0.5)  → même couleur, transparente à 50 %
+ */
+
+/* ===== 1. Variables ===== */
+:root {
+  // Police à chasse fixe utilisée pour les étiquettes, numéros et boutons
+  --rm-font-mono: 'Space Mono', ui-monospace, monospace;
+}
+
+/* ===== 2. Fond spatial ===== */
+// Plusieurs dégradés superposés sur la racine de l'application Vuetify :
+//   - 3 grandes lueurs colorées (vert en haut, rose à droite, violet à gauche)
+//   - des petits points blancs ou bleutés = les étoiles
+//   - la couleur de fond du thème tout en dessous
+// « :root » augmente la priorité du sélecteur pour passer devant le fond
+// que Vuetify applique lui-même à .v-application.
+:root .v-application {
+  background:
+    radial-gradient(ellipse 60% 40% at 50% -8%, rgba(var(--v-theme-primary), 0.22), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 100% 35%, rgba(var(--v-theme-neon-pink), 0.14), transparent 70%),
+    radial-gradient(ellipse 45% 30% at 0% 70%, rgba(var(--v-theme-neon-violet), 0.18), transparent 70%),
+    radial-gradient(circle at 8% 14%, #fff 0 1px, transparent 2px),
+    radial-gradient(circle at 21% 6%, #cfe8ff 0 1px, transparent 2px),
+    radial-gradient(circle at 37% 19%, #fff 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 58% 9%, #fff 0 1px, transparent 2px),
+    radial-gradient(circle at 73% 16%, #cfe8ff 0 1px, transparent 2px),
+    radial-gradient(circle at 91% 8%, #fff 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 4% 38%, #fff 0 1px, transparent 2px),
+    radial-gradient(circle at 96% 46%, #cfe8ff 0 1px, transparent 2px),
+    radial-gradient(circle at 12% 62%, #fff 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 88% 70%, #fff 0 1px, transparent 2px),
+    radial-gradient(circle at 30% 84%, #cfe8ff 0 1px, transparent 2px),
+    radial-gradient(circle at 66% 90%, #fff 0 1px, transparent 2px),
+    rgb(var(--v-theme-background));
+  // « fixed » : le fond reste immobile quand on fait défiler la page,
+  // sinon les lueurs et les étoiles seraient étirées sur toute la hauteur.
+  background-attachment: fixed;
+}
+
+/* ===== 3. Titres de page ===== */
+// Utilisé par les <h1> des pages (Personnages, Mes favoris, À propos…)
+.page-title {
+  margin: 32px 0 24px;
+  text-align: center;
+  // clamp(min, idéal, max) : la taille suit la largeur de l'écran, entre 2 et 3 rem
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+// Le nombre entre parenthèses à côté d'un titre : « Personnages (826) »
+.page-title__count {
+  font-family: var(--rm-font-mono);
+  font-size: 0.7em;
+  color: rgb(var(--v-theme-primary));
+}
+
+/* ===== 4. Étiquettes ===== */
+// Petit texte en majuscules au-dessus d'une valeur : « ESPÈCE », « ORIGINE »…
+.mono-label {
+  font-family: var(--rm-font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(var(--v-theme-muted));
+}
+
+/* ===== 5. Cadre « Pass » ===== */
+// Bordure verte + halo lumineux, partagés par la carte (CharacterCard)
+// et par la fiche détaillée (pages/personnage/[id].vue).
+.pass-frame {
+  border: 1px solid rgba(var(--v-theme-primary), 0.55);
+  box-shadow:
+    0 0 0 4px rgba(var(--v-theme-primary), 0.08),
+    0 0 40px -8px rgba(var(--v-theme-primary), 0.4);
+}
+
+/* ===== 6. Code-barres décoratif ===== */
+// Un seul dégradé répété dessine les barres (aucune image à charger).
+// Toujours accompagné de aria-hidden="true" : il n'apporte aucune information.
+.pass-barcode {
+  height: 38px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgb(var(--v-theme-on-surface)) 0 2px,
+    transparent 2px 4px,
+    rgb(var(--v-theme-on-surface)) 4px 5px,
+    transparent 5px 9px,
+    rgb(var(--v-theme-on-surface)) 9px 12px,
+    transparent 12px 14px
+  );
+  opacity: 0.85;
+}
