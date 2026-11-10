@@ -1,7 +1,7 @@
 <!--
-  pages/index.vue — page "voygeurs"
+  pages/index.vue — page « Voyageurs »
   Liste paginée des 826 personnages avec recherche, filtre par statut et tri.
-  Toute la logique de filtrage est un « pipeline » de computed .
+  Toute la logique de filtrage est un « pipeline » de computed.
 -->
 <template>
   <v-container>

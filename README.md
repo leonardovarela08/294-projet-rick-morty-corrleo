@@ -10,8 +10,8 @@
 ## 1. 🎨 Présentation du projet
 
 ### Concept
-- **API choisie** : l'API Rick and Morty de la DIVTEC (`https://apis.divtec.me/api/rickandmorty`). J'ai choisi cet univers parce que j'aime la série, son humour et sa science-fiction. L'API est gratuite, sans clé, en HTTPS / JSON, et propose 826 personnages avec image, statut, espèce, origine et nombre d'apparitions : assez de données pour une recherche, un filtre, un tri et une pagination utiles.
-- **Public cible** : les fans de la série qui veulent retrouver un personnage, voir sa fiche et se constituer une liste de favoris.
+- **API choisie** : l'API Rick and Morty de la DIVTEC (`https://apis.divtec.me/api/rickandmorty`). J'ai choisi cet univers parce que c'est ma série d'animation préférée et c'est une des meilleures sinon la meilleure série d'animation humoristique pour adultes, qui mélange un humour plutôt intelligent et subtil, la science-fiction, en abordant des thèmes très profonds comme l'insignifiance de la vie humaine face à la taille de l'univers. L'API est gratuite, sans clé, en HTTPS / JSON, et propose 826 personnages avec image, statut, espèce, origine et nombre d'apparitions : assez de données pour une recherche, un filtre, un tri et une pagination utiles.
+- **Public cible** : les fans de la série qui veulent retrouver un personnage, voir sa fiche et se constituer une liste de favoris, etc.
 - **Objectifs de l'application** :
   - parcourir facilement les 826 personnages ;
   - trouver un personnage précis (recherche, filtre par statut, tri) ;
@@ -119,6 +119,34 @@ src/
 └── styles/                  → settings.scss, global.scss
 ```
 
+**Schéma du data-flow :**
+
+```mermaid
+flowchart TD
+    APP["App.vue initialise une seule fois<br/>avec store.init()"] --> STORE["Store Pinia<br/>rickMortyStore"]
+
+    STORE --> SVC["Service rickMortyApi"]
+    SVC --> AXIOS["Client Axios<br/>VITE_API_URL"]
+    AXIOS --> API["Pages de l'API DIVTEC<br/>/characters et /episodes"]
+    API -- "826 personnages + épisodes" --> STORE
+
+    STORE --> FAV["Page des favoris"]
+    STORE --> PIPE["Statut puis recherche<br/>puis tri puis pagination"]
+    PIPE --> HOME["Page Voyageurs"]
+
+    FAV -- "prop character" --> CARD["CharacterCard"]
+    HOME -- "prop character" --> CARD
+    HOME -- "v-model (prop + emit)" --> SEARCH["SearchBar"]
+    CARD -- "clic → /personnage/:id" --> FICHE["Fiche personnage/[id]"]
+    SVC -- "fetchCharacterById(id)" --> FICHE
+
+    CARD -- "prop character" --> BAND["PassBand (bouton cœur)"]
+    FICHE -- "prop character" --> BAND
+    BAND --> TOGGLE["Action toggleFavorite<br/>du store"]
+    BAND --> SNACK["Message de confirmation<br/>(snackbar)"]
+    TOGGLE --> LS["Identifiants JSON dans localStorage<br/>relus par store.init()"]
+```
+
 **Data-flow résumé :**
 - Au démarrage, `App.vue` appelle `store.init()` → le store charge les favoris (`localStorage`), puis demande les personnages et les épisodes au **service API** → le service appelle l'API avec **Axios** → les données sont rangées dans le **state** (en cas d'erreur : un message, affiché dans une alerte).
 - Les pages lisent le store avec `storeToRefs` → un **pipeline de `computed`** prépare l'affichage : statut → recherche → tri → page.
@@ -209,17 +237,17 @@ J'estime que l'IA représente **environ 40 % du travail, ou un peu plus**.
 - **Ce qui m'a aidé** : la console et l'onglet Network du navigateur, l'exercice Pokédex, et l'accompagnement de Claude.
 
 ### Réussites et fiertés
-- Une application complète et en ligne, qui coche toutes les exigences du projet.
-- Le design « Pass interdimensionnel », qui donne une vraie identité au site.
+- Une application complète en ligne, qui coche toutes les exigences du projet.
+- Le design « Pass interdimensionnel », qui donne une vraie identité au site et qui représente bien l'esthétique de l'univers Rick and Morty
 - Une expérience fluide : la liste conservée en revenant d'une fiche, la confirmation avant de vider les favoris.
-- Mes progrès : au début, je ne savais pas où placer un fichier dans `src/pages` ; à la fin, je sais expliquer le rôle de chaque fichier.
+- Mes progrès : au début, c'était un peu difficile la prise en main de Vuetify, mais au fur et à mesure que je faisais les exercices, j'ai commencé à comprendre les notions, et maintenant, j'arrive à expliquer par mes mots la grande majorité des fichiers, rôles et fonctions présents dans mon projet.
 
 ### Améliorations possibles
 - Afficher les vrais épisodes de chaque personnage si l'API les relie un jour.
 - Remettre les épisodes et les lieux sous une autre forme (par exemple une fiche épisode avec ses personnages).
 - Conserver aussi les préférences (tri, filtre) après un rechargement, avec le `localStorage`.
-- Ajouter des tests automatisés et un mode clair / sombre.
-- Approfondir : les tests (Vitest), TypeScript, l'accessibilité avancée.
+- Ajouter un mode clair / sombre et d'autres thèmes.
+- Ajouter une description plus détaillée des personnages si l'API le permet un jour.
 
 ---
 

@@ -12,5 +12,5 @@ const api = axios.create({
 
 })
 
-// on est export l'api pour l'utiliser par tout
+// On exporte l'instance pour l'utiliser partout (dans le service API)
 export default api
