@@ -24,7 +24,7 @@
 - **Fiche détaillée** de chaque personnage (route dynamique `/personnage/:id`) : statut, espèce, genre, trajet origine → dernière position, nombre réel d'apparitions et exemples d'épisodes.
 - **Favoris** : cœur sur chaque carte et sur la fiche, message de confirmation, page « Mes favoris », bouton « Vider mes favoris » avec une demande de confirmation.
 - **Persistance locale** : les favoris sont sauvegardés dans le `localStorage` et restent après un rechargement. La recherche, le filtre, le tri et la page sont gardés dans le store pendant la navigation (on les retrouve en revenant d'une fiche).
-- **États gracieux** : squelettes pendant le chargement, alerte en cas d'erreur réseau, message « Aucun personnage ne correspond… », page 404, données de secours (`mock.json`) si l'API est injoignable.
+- **États gracieux** : squelettes pendant le chargement, alerte en cas d'erreur réseau, message « Aucun personnage ne correspond… », page 404.
 
 ### Aperçu visuel
 ![Screenshot de l'application](img/screenshot.png)
@@ -49,7 +49,7 @@
 - **Semaine 2 (11 – 19 oct.)** : exercice Pokédex, étapes E1 à E7 : composants et props, slots, routage par fichiers, page détail avec route dynamique, store Pinia.
 - **Semaine 3 (20 – 27 oct.)** : application au projet : grille de personnages, composant `CharacterCard`, footer avec slot, menu, pages, fiche d'un personnage, store Pinia relié aux pages.
 - **Semaine 4 (1er – 3 nov.)** : Pokédex E9 à E13 puis projet : migration vers Axios et `.env`, états de chargement et d'erreur, recherche, filtre par statut et tri (pipeline de `computed`).
-- **Semaine 5 (7 – 9 nov.)** : favoris et `localStorage`, chargement des 9 pages de l'API, pagination de l'affichage, état de la liste dans le store, nouveau design, service API, données de secours, composant `SearchBar` (emit), confirmation, documentation.
+- **Semaine 5 (7 – 9 nov.)** : favoris et `localStorage`, chargement des 9 pages de l'API, pagination de l'affichage, état de la liste dans le store, nouveau design, service API, composant `SearchBar` (emit), confirmation, documentation.
 
 ---
 
@@ -117,11 +117,10 @@ src/
 ├── plugins/                 → axios.js (instance Axios), vuetify.js (thème)
 ├── utils/                   → imageUrl.js, characterLabels.js
 └── styles/                  → settings.scss, global.scss
-mock.json                    → données de secours si l'API est injoignable
 ```
 
 **Data-flow résumé :**
-- Au démarrage, `App.vue` appelle `store.init()` → le store charge les favoris (`localStorage`), puis demande les personnages et les épisodes au **service API** → le service appelle l'API avec **Axios** → les données sont rangées dans le **state** (en cas d'erreur : `mock.json`).
+- Au démarrage, `App.vue` appelle `store.init()` → le store charge les favoris (`localStorage`), puis demande les personnages et les épisodes au **service API** → le service appelle l'API avec **Axios** → les données sont rangées dans le **state** (en cas d'erreur : un message, affiché dans une alerte).
 - Les pages lisent le store avec `storeToRefs` → un **pipeline de `computed`** prépare l'affichage : statut → recherche → tri → page.
 - L'utilisateur déclenche un **event** (clic sur le cœur) → le composant appelle l'action `toggleFavorite()` du **store** → le state et le `localStorage` sont mis à jour → toutes les pages qui l'utilisent se mettent à jour seules (réactivité).
 
@@ -151,7 +150,7 @@ mock.json                    → données de secours si l'API est injoignable
 - Animations désactivées si le système demande de réduire les mouvements
 
 ### Tests d'erreurs & fallback
-- API down (réseau coupé dans les outils de développement) → alerte « Erreur réseau » et **données de secours** de `mock.json` affichées ; la barre d'état indique « Hors ligne »
+- API down (réseau coupé dans les outils de développement) → alerte « Erreur réseau » à la place de la liste ; la barre d'état indique « Perturbation »
 - Fiche d'un id inexistant (`/personnage/99999`) → « Personnage non trouvé »
 - Recherche sans résultat → « Aucun personnage ne correspond à votre recherche ou à ce filtre »
 - Aucun favori → message d'aide sur la page Favoris
@@ -177,12 +176,12 @@ J'estime que l'IA représente **environ 40 % du travail, ou un peu plus**.
 
 **Compréhension et adaptation**
 - Pour l'exercice Pokédex et la base du projet, Claude expliquait chaque étape et donnait des indices ; j'écrivais le code moi-même et il le relisait. La solution n'était donnée qu'en dernier recours.
-- Code **généré par Claude** puis relu et expliqué : le nouveau design « Pass interdimensionnel » (thème, composants `PassBand`, `PassPhoto`, `StatusBadge`, `InfoField`, `EpisodeSamples`, header et footer), le chargement des 9 pages de l'API, la pagination de l'affichage, le service API, le fallback `mock.json`, `SearchBar` et la confirmation avant de vider les favoris.
+- Code **généré par Claude** puis relu et expliqué : le nouveau design « Pass interdimensionnel » (thème, composants `PassBand`, `PassPhoto`, `StatusBadge`, `InfoField`, `EpisodeSamples`, header et footer), le chargement des 9 pages de l'API, la pagination de l'affichage, le service API, `SearchBar` et la confirmation avant de vider les favoris.
 - J'ai adapté ce code au projet : la maquette du design m'a servi d'inspiration et non de modèle à copier, j'ai demandé le tri par numéro, l'affichage de 4 épisodes puis du reste sur la fiche, plus de cartes par ligne sur les grands écrans, et j'ai retouché des textes et des commentaires.
 
 ### Parties codées manuellement
 - Composants principaux : 50 % personnel (première version de `CharacterCard`, `AppHeader`, `AppFooter` et des pages écrite par moi, design final généré)
-- Store & persistance : 60 % personnel (store, chargement, favoris écrits avec guidage ; pagination de l'API et fallback générés)
+- Store & persistance : 60 % personnel (store, chargement, favoris écrits avec guidage ; pagination de l'API générée)
 - Routing & navigation : 80 % personnel
 - Tests & validation : tests manuels sur le site 100 % personnels ; vérifications automatiques (linter, build, captures avec données simulées) faites avec Claude
 
@@ -212,7 +211,7 @@ J'estime que l'IA représente **environ 40 % du travail, ou un peu plus**.
 ### Réussites et fiertés
 - Une application complète et en ligne, qui coche toutes les exigences du projet.
 - Le design « Pass interdimensionnel », qui donne une vraie identité au site.
-- Une expérience fluide : la liste conservée en revenant d'une fiche, la confirmation avant de vider les favoris, le mode hors ligne.
+- Une expérience fluide : la liste conservée en revenant d'une fiche, la confirmation avant de vider les favoris.
 - Mes progrès : au début, je ne savais pas où placer un fichier dans `src/pages` ; à la fin, je sais expliquer le rôle de chaque fichier.
 
 ### Améliorations possibles

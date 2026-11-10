@@ -1,7 +1,7 @@
 <!--
-  pages/index.vue — page « Personnages » (accueil)
+  pages/index.vue — page "voygeurs"
   Liste paginée des 826 personnages avec recherche, filtre par statut et tri.
-  Toute la logique de filtrage est un « pipeline » de computed (voir le script).
+  Toute la logique de filtrage est un « pipeline » de computed .
 -->
 <template>
   <v-container>
@@ -88,23 +88,18 @@
       </v-col>
     </v-row>
 
-    <!-- 2. Erreur sans données de secours : rien à afficher à part le message -->
-    <v-alert v-else-if="error && !isUsingMock" type="error" variant="tonal">
+    <!-- 2. Erreur réseau : une alerte à la place de la liste -->
+    <v-alert
+      v-else-if="error"
+      title="Erreur réseau"
+      type="error"
+      variant="tonal"
+    >
       {{ error }}
     </v-alert>
 
     <!-- 3. Données -->
     <template v-else>
-      <!-- API injoignable : on prévient l'utilisateur que ce sont les données de secours (mock.json) -->
-      <v-alert
-        v-if="isUsingMock"
-        class="mb-6"
-        title="Erreur réseau"
-        type="error"
-        variant="tonal"
-      >
-        {{ error }} Affichage de {{ characters.length }} personnages de secours en attendant.
-      </v-alert>
       <!-- Aucun résultat pour cette recherche / ce filtre -->
       <v-alert
         v-if="sortedCharacters.length === 0"
@@ -158,7 +153,7 @@
   // storeToRefs garde la réactivité : searchQuery, selectedStatus… restent liés au store
   const store = useRickMortyStore()
   const {
-    characters, isLoading, error, isUsingMock,
+    characters, isLoading, error,
     currentPage, searchQuery, selectedStatus, sortOrder,
   } = storeToRefs(store)
 

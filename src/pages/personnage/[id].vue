@@ -129,13 +129,11 @@
   import PassPhoto from '@/components/PassPhoto.vue'
   import StatusBadge from '@/components/StatusBadge.vue'
   import { fetchCharacterById } from '@/services/rickMortyApi.js'
-  import { useRickMortyStore } from '@/stores/rickMortyStore.js'
   import { getImageUrl } from '@/utils/imageUrl.js'
 
   // ===== État de la page =====
   // useRoute() lit l'adresse actuelle (dont le paramètre :id)
   const route = useRoute()
-  const store = useRickMortyStore()
   const character = ref(null)
   // true dès le départ : sinon l'alerte « non trouvé » clignote avant la réponse de l'API
   const isLoading = ref(true)
@@ -146,12 +144,9 @@
       // Requête au service API (une requête dédiée : la fiche reste à jour même ouverte directement par son adresse)
       character.value = await fetchCharacterById(route.params.id)
     } catch (error) {
+      // Axios lève une erreur si le personnage n'existe pas (404) ou si l'API est injoignable :
+      // character reste null → l'alerte « Personnage non trouvé » s'affiche.
       console.error(error)
-      // Repli : si l'API est injoignable, on cherche le personnage dans ceux déjà chargés
-      // (par exemple les données de secours de mock.json).
-      // route.params.id est un texte ('42') : Number() le convertit pour comparer avec l'id (42).
-      // Si on ne le trouve pas non plus, character reste null → l'alerte « non trouvé » s'affiche.
-      character.value = store.characters.find(c => c.id === Number(route.params.id)) ?? null
     } finally {
       // finally s'exécute toujours (succès ou erreur) : le chargement est terminé
       isLoading.value = false

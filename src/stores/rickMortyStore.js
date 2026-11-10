@@ -3,8 +3,6 @@
 import { defineStore } from 'pinia'
 // Les requêtes HTTP sont dans le service API (src/services/rickMortyApi.js)
 import { fetchAllCharacters, fetchAllEpisodes } from '@/services/rickMortyApi.js'
-// Données de secours affichées si l'API est injoignable (fichier à la racine du projet)
-import mockData from '../../mock.json'
 
 // Store pinia
 export const useRickMortyStore = defineStore('rickMorty', {
@@ -16,8 +14,6 @@ export const useRickMortyStore = defineStore('rickMorty', {
     episodes: [],
     isLoading: false,
     error: null,
-    // true quand l'API est injoignable et qu'on affiche les données de mock.json
-    isUsingMock: false,
 
     // --- Favoris (tableau d'id, sauvegardé dans le localStorage) ---
     favorites: [],
@@ -72,14 +68,6 @@ export const useRickMortyStore = defineStore('rickMorty', {
       this.episodes = await fetchAllEpisodes()
     },
 
-    // Fallback : si l'API ne répond pas, on affiche les données de secours de mock.json
-    // au lieu d'une page vide. isUsingMock permet aux pages de prévenir l'utilisateur.
-    useMockData () {
-      this.characters = mockData.characters
-      this.episodes = mockData.episodes
-      this.isUsingMock = true
-    },
-
     // Appelée une seule fois au démarrage (App.vue)
     async init () {
       this.isLoading = true
@@ -94,10 +82,9 @@ export const useRickMortyStore = defineStore('rickMorty', {
         ])
       } catch (error) {
         // Erreur réseau (API en panne, pas de connexion, 500…) :
-        // on garde un message pour l'utilisateur et on bascule sur les données de secours
+        // on garde un message que les pages affichent dans une alerte
         console.error(error)
         this.error = 'Impossible de joindre l’API Rick and Morty.'
-        this.useMockData()
       } finally {
         // finally s'exécute toujours (succès ou erreur) : le chargement est terminé
         this.isLoading = false

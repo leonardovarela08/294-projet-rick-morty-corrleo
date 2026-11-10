@@ -14,8 +14,8 @@
       Réseau interdimensionnel · {{ networkStatus.label }}
     </span>
     <v-spacer />
-    <!-- Le nombre de personnages n'est affiché qu'une fois chargé, et pas sur téléphone -->
-    <span v-if="!isLoading" class="status-bar__item d-none d-sm-inline">
+    <!-- Le nombre de personnages n'est affiché qu'une fois chargé sans erreur, et pas sur téléphone -->
+    <span v-if="!isLoading && !error" class="status-bar__item d-none d-sm-inline">
       {{ characters.length }} voyageurs référencés
     </span>
   </v-system-bar>
@@ -80,16 +80,14 @@
   const store = useRickMortyStore()
   const router = useRouter()
   // storeToRefs garde la réactivité : la barre d'état se met à jour toute seule
-  const { characters, isLoading, error, isUsingMock } = storeToRefs(store)
+  const { characters, isLoading, error } = storeToRefs(store)
 
   // Les 3 états de l'API traduits en « état du réseau » : texte + couleur du point
   const networkStatus = computed(() => {
     if (isLoading.value) {
       return { label: 'Connexion en cours…', color: 'neon-orange' }
     }
-    if (isUsingMock.value) {
-      return { label: 'Hors ligne · données de secours', color: 'neon-orange' }
-    }
+
     if (error.value) {
       return { label: 'Perturbation', color: 'status-dead' }
     }
